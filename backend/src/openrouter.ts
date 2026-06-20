@@ -19,6 +19,21 @@ export const tools = [
   {
     type: 'function',
     function: {
+      name: 'degreeToCelsius',
+      description: 'Convert a temperature from Fahrenheit or Kelvin to Celsius.',
+      parameters: {
+        type: 'object',
+        properties: {
+          degree: { type: 'number', description: 'The temperature value to convert.' },
+          scale: { type: 'string', enum: ['F', 'K'], description: 'The scale of the input temperature, either F for Fahrenheit or K for Kelvin.' }
+        },
+        required: ['degree', 'scale']
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
       name: 'convertCurrency',
       description:
         'Convert an amount from one currency to another using simulated exchange rates. Supported currencies: USD, SGD, THB, MMK.',
@@ -38,16 +53,25 @@ export const tools = [
     function: {
       name: 'calculate',
       description:
-        'Calculate a basic arithmetic expression. Supports numbers, parentheses, addition, subtraction, multiplication, division, and modulo.',
+        'Calculate basic arithmetic using two numbers and an operation.',
       parameters: {
         type: 'object',
         properties: {
-          expression: {
+          number1: {
+            type: 'number',
+            description: 'The first number for a two-parameter calculation.'
+          },
+          number2: {
+            type: 'number',
+            description: 'The second number for a two-parameter calculation.'
+          },
+          operation: {
             type: 'string',
-            description: 'The arithmetic expression to calculate, for example: 12 * (5 + 3).'
+            enum: ['add', 'subtract', 'multiply', 'divide', 'modulo'],
+            description: 'The operation to apply to number1 and number2.'
           }
         },
-        required: ['expression']
+        required: ['number1', 'number2', 'operation']
       }
     }
   },
@@ -56,13 +80,13 @@ export const tools = [
     function: {
       name: 'searchKnowledgeBase',
       description:
-        'Retrieve relevant knowledge base passages before answering questions about this app, setup, runtime URLs, or project-specific details.',
+        'Search the local project knowledge base before answering questions about this app, backend, frontend, setup, APIs, database schema, tools, or runtime behavior.',
       parameters: {
         type: 'object',
         properties: {
           query: {
             type: 'string',
-            description: 'The user question or focused search phrase to retrieve relevant knowledge base context for.'
+            description: 'The user question or focused search phrase to retrieve project-specific context for.'
           },
           limit: {
             type: 'number',
